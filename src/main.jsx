@@ -9,6 +9,7 @@ import ForgotPassword from "./pages/forgetPassword/ForgetPassword";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { store } from "./store";
 import { Provider } from "react-redux";
+import Home from "./pages/home/Home";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path:'/forget-password',
     element:<ForgotPassword/>
+  },
+  {
+    path:'/',
+    element:<Home/>
   }
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(

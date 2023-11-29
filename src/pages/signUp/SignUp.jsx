@@ -4,10 +4,9 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   updateProfile,
+  sendEmailVerification,
 } from "firebase/auth";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { userData } from "../../userLoginInfoSlice";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,8 +27,6 @@ const SignUp = () => {
   const [emailErr, setEmailErr] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
   const [confirmPasswordErr, setConfirmPasswordErr] = useState("");
-  // redux
-  const dispatch = useDispatch();
   // react router
   const navigate = useNavigate();
   // handle validation
@@ -68,17 +65,17 @@ const SignUp = () => {
       .then((userCredential) => {
         // Signed up
         const user = userCredential.user;
+        console.log("🚀 > file: SignUp.jsx:68 > .then > user:", user)
         updateProfile(auth.currentUser, {
           displayName: fName + lName,
           photoURL: "https://example.com/jane-q-user/profile.jpg",
         }).then(() => {
+          sendEmailVerification(auth.currentUser)
           toast.success("Registration successful");
           setTimeout(() => {
             navigate("/sign-in");
           }, 2000);
         });
-        dispatch(userData(user));
-        localStorage.setItem("userData", JSON.stringify(user));
         // ...
       })
       .catch((error) => {
@@ -86,15 +83,8 @@ const SignUp = () => {
         if (errorCode === "auth/email-already-in-use") {
           setEmailErr("this email already exist");
         }
-        console.log(
-          "🚀 > file: SignUp.jsx:32 > handleSignUp > errorCode:",
-          errorCode
-        );
         const errorMessage = error.message;
-        console.log(
-          "🚀 > file: SignUp.jsx:34 > handleSignUp > errorMessage:",
-          errorMessage
-        );
+        console.log("🚀 > file: SignUp.jsx:90 > handleSignUp > errorMessage:", errorMessage)
         // ..
       });
   };

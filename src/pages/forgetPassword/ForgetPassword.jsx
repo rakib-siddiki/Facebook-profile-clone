@@ -50,6 +50,7 @@ const ForgotPassword = () => {
                                     className="py-3 px-4 block w-full outline-none border border-gray-300 rounded-lg text-sm  disabled:opacity-50 disabled:pointer-events-none"
                                     required
                                     aria-describedby="email-error"
+                                    placeholder="enter your email "
                                   />
                                 </div>
                                 <p

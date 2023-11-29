@@ -1,9 +1,94 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import img from "../../assets/sign-in/sign-in.gif";
-
+import { useState } from "react";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
+import { ToastContainer, toast } from "react-toastify";
+import { IoEye, IoEyeOff } from "react-icons/io5";
 const SignIn = () => {
+  //state variables
+  const [email, setEmail] = useState("");
+  const [password, setPassowrd] = useState("");
+  const [emailErr, setEmailErr] = useState("");
+  const [passwordErr, setPasswordErr] = useState("");
+  const [error, setError] = useState(false);
+  const [show, setShow] = useState(true);
+  // other variable
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+  const navigate = useNavigate();
+  // signedin with email and password
+  const handleSignedIn = () => {
+    if (email.trim() === "" && password.trim() === "") {
+      setEmailErr("Enter your Email");
+      setPasswordErr("Enter your password");
+      return;
+    }
+    // Signed in
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user
+        console.log(
+          "🚀 > file: SignIn.jsx:33 > .then > userCredential:",
+          userCredential
+        );
+        if (user.emailVerified) {
+          toast.success("Sign In successful");
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
+        }else{
+          toast.warn('please verify your email')
+        }
+        //navogate to home
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        errorCode === "auth/invalid-credential" && setError(true),
+          toast.error("Incorrect Information");
+        errorCode === "auth/missing-password" && setError(true);
+        
+      });
+  };
+  // signedIn with google
+  const signedInWithGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        console.log(
+          "🚀 > file: SignIn.jsx:50 > .then > credential:",
+          credential
+        );
+        // ...
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        console.log(
+          "🚀 > file: SignIn.jsx:55 > signedInWithGoogle > errorCode:",
+          errorCode
+        );
+      });
+  };
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <div className="h-full md:h-screen">
         <div className="container mx-auto">
           <div className="flex justify-center px-6 my-12">
@@ -33,6 +118,7 @@ const SignIn = () => {
 
                     <div className="mt-5">
                       <button
+                        onClick={signedInWithGoogle}
                         type="button"
                         className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
                       >
@@ -68,13 +154,13 @@ const SignIn = () => {
                       </div>
 
                       {/* Form */}
-                      <form>
+                      <form onClick={(e) => e.preventDefault()}>
                         <div className="grid gap-y-4">
                           {/* Form Group */}
                           <div>
                             <label
                               htmlFor="email"
-                              className="block text-sm mb-2"
+                              className="block text-sm mb-2 font-semibold"
                             >
                               Email address
                             </label>
@@ -83,11 +169,25 @@ const SignIn = () => {
                                 type="email"
                                 id="email"
                                 name="email"
-                                className="py-3 px-4 block w-full  rounded-lg text-sm border border-gray-300 outline-none disabled:opacity-50 disabled:pointer-events-none"
+                                placeholder="Enter your email "
+                                value={email}
+                                onChange={(e) => {
+                                  setEmail(e.target.value);
+                                }}
+                                className="py-3 px-4 block w-full mb-3 font-mono  rounded-lg text-sm border border-gray-300 outline-none disabled:opacity-50 disabled:pointer-events-none"
                                 required
                                 aria-describedby="email-error"
                               />
-                              <div className=" absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3">
+                              {emailErr && (
+                                <p className=" absolute -bottom-7 w-full py-0.5 text-sm  text-white  rounded-bl-3xl  px-4 font-semibold bg-red-500">
+                                  {emailErr}
+                                </p>
+                              )}
+                              <div
+                                className={`absolute  end-0 flex items-center pointer-events-none pe-3 ${
+                                  error ? "flex top-3" : "hidden"
+                                }`}
+                              >
                                 <svg
                                   className="h-5 w-5 text-red-500"
                                   width="16"
@@ -115,7 +215,7 @@ const SignIn = () => {
                             <div className="flex justify-between items-center">
                               <label
                                 htmlFor="password"
-                                className="block text-sm mb-2"
+                                className="block text-sm mb-2 font-semibold"
                               >
                                 Password
                               </label>
@@ -131,53 +231,36 @@ const SignIn = () => {
                                 type="password"
                                 id="password"
                                 name="password"
-                                className="py-3 px-4 block w-full  rounded-lg text-sm border border-gray-300 outline-none disabled:opacity-50 disabled:pointer-events-none"
+                                placeholder="Enter your password "
+                                value={password}
+                                onChange={(e) => {
+                                  setPassowrd(e.target.value);
+                                }}
+                                className="py-3 px-4 mb-5 block w-full  rounded-lg font-mono text-sm border border-gray-300 outline-none disabled:opacity-50 disabled:pointer-events-none "
                                 required
                                 aria-describedby="password-error"
                               />
-                              <div className="absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3">
-                                <svg
-                                  className="h-5 w-5 text-red-500"
-                                  width="16"
-                                  height="16"
-                                  fill="currentColor"
-                                  viewBox="0 0 16 16"
-                                  aria-hidden="true"
-                                >
-                                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
-                                </svg>
+                              {passwordErr && (
+                                <p className="absolute w-full -bottom-7 py-0.5 text-sm text-white  rounded-bl-3xl  px-4 font-semibold bg-red-500">
+                                  {passwordErr}
+                                </p>
+                              )}
+                              {/* eye icon */}
+                              <div
+                                onClick={() => setShow((prev) => !prev)}
+                                className={`absolute  end-0 flex items-center top-3.5 right-0 pe-3 text-lg cursor-pointer z-20 
+                                   `}
+                              >
+                                {show ? <IoEye /> : <IoEyeOff />}
                               </div>
                             </div>
-                            <p
-                              className="hidden text-xs text-red-600 mt-2"
-                              id="password-error"
-                            >
-                              8+ characters required
-                            </p>
                           </div>
                           {/* End Form Group */}
 
-                          {/* Checkbox */}
-                          <div className="flex items-center">
-                            <div className="flex">
-                              <input
-                                id="remember-me"
-                                name="remember-me"
-                                type="checkbox"
-                                className="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 pointer-events-none focus:ring-blue-500"
-                              />
-                            </div>
-                            <div className="ms-3">
-                              <label htmlFor="remember-me" className="text-sm">
-                                Remember me
-                              </label>
-                            </div>
-                          </div>
-                          {/* End Checkbox */}
-
                           <button
                             type="submit"
-                            className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                            onClick={handleSignedIn}
+                            className=" active:scale-95 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                           >
                             Sign in
                           </button>
