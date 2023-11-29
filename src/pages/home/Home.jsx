@@ -1,11 +1,13 @@
-import React from 'react';
+import Dashbord from "../../component/dashbord/Dashbord";
+import NavBar from "../../component/Navbar";
 
 const Home = () => {
-    return (
-        <div>
-            home
-        </div>
-    );
+  return (
+    <>
+    <NavBar/>
+    <Dashbord/>
+    </>
+  );
 };
 
 export default Home;
