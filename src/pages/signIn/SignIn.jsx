@@ -6,9 +6,12 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
+  updateProfile,
 } from "firebase/auth";
 import { ToastContainer, toast } from "react-toastify";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import { useDispatch } from "react-redux";
+import { userData } from "../../userLoginInfoSlice";
 const SignIn = () => {
   //state variables
   const [email, setEmail] = useState("");
@@ -21,6 +24,7 @@ const SignIn = () => {
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   // signedin with email and password
   const handleSignedIn = () => {
     if (email.trim() === "" && password.trim() === "") {
@@ -31,18 +35,16 @@ const SignIn = () => {
     // Signed in
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const user = userCredential.user
-        console.log(
-          "🚀 > file: SignIn.jsx:33 > .then > userCredential:",
-          userCredential
-        );
+        const user = userCredential.user;
         if (user.emailVerified) {
           toast.success("Sign In successful");
+          dispatch(userData(user));
+          localStorage.setItem("userData", JSON.stringify(user));
           setTimeout(() => {
             navigate("/");
           }, 2000);
-        }else{
-          toast.warn('please verify your email')
+        } else {
+          toast.warn("please verify your email");
         }
         //navogate to home
         // ...
@@ -52,28 +54,26 @@ const SignIn = () => {
         errorCode === "auth/invalid-credential" && setError(true),
           toast.error("Incorrect Information");
         errorCode === "auth/missing-password" && setError(true);
-        
       });
   };
   // signedIn with google
   const signedInWithGoogle = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        console.log(
-          "🚀 > file: SignIn.jsx:50 > .then > credential:",
-          credential
-        );
-        // ...
+        // The signed-in user info.
+        const user = result.user;
+        dispatch(userData(user))
+        localStorage.setItem('userData',JSON.stringify(user))
+        navigate('/')
       })
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
-        console.log(
-          "🚀 > file: SignIn.jsx:55 > signedInWithGoogle > errorCode:",
-          errorCode
-        );
+        const errorMessage = error.message;   // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
       });
   };
   return (
@@ -105,8 +105,8 @@ const SignIn = () => {
                       <h1 className="block text-2xl font-bold text-gray-800">
                         Sign in
                       </h1>
-                      <p className="mt-2 text-sm text-gray-600">
-                        {"Don't"} have an account yet?
+                      <p className="mt-2 text-sm text-gray-600 font-pops">
+                        {"Don't"} have an account yet?{" "}
                         <Link
                           className="text-blue-600 decoration-2 hover:underline font-medium"
                           to={"/sign-up"}
@@ -160,7 +160,7 @@ const SignIn = () => {
                           <div>
                             <label
                               htmlFor="email"
-                              className="block text-sm mb-2 font-semibold"
+                              className="block text-sm mb-2 font-semibold font-pops"
                             >
                               Email address
                             </label>
@@ -174,7 +174,7 @@ const SignIn = () => {
                                 onChange={(e) => {
                                   setEmail(e.target.value);
                                 }}
-                                className="py-3 px-4 block w-full mb-3 font-mono  rounded-lg text-sm border border-gray-300 outline-none disabled:opacity-50 disabled:pointer-events-none"
+                                className="py-3 px-4 block w-full mb-3 font-pops  rounded-lg text-sm border border-gray-300 outline-none disabled:opacity-50 disabled:pointer-events-none"
                                 required
                                 aria-describedby="email-error"
                               />
@@ -215,12 +215,12 @@ const SignIn = () => {
                             <div className="flex justify-between items-center">
                               <label
                                 htmlFor="password"
-                                className="block text-sm mb-2 font-semibold"
+                                className="block text-sm mb-2 font-semibold font-pops"
                               >
                                 Password
                               </label>
                               <Link
-                                className="text-sm text-blue-600 decoration-2 hover:underline font-medium"
+                                className="text-sm text-blue-600 decoration-2 hover:underline font-medium font-pops"
                                 to={"/forget-password"}
                               >
                                 Forgot password?
@@ -236,7 +236,7 @@ const SignIn = () => {
                                 onChange={(e) => {
                                   setPassowrd(e.target.value);
                                 }}
-                                className="py-3 px-4 mb-5 block w-full  rounded-lg font-mono text-sm border border-gray-300 outline-none disabled:opacity-50 disabled:pointer-events-none "
+                                className="py-3 px-4 mb-5 block w-full  rounded-lg font-pops text-sm border border-gray-300 outline-none disabled:opacity-50 disabled:pointer-events-none "
                                 required
                                 aria-describedby="password-error"
                               />

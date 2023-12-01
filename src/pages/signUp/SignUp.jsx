@@ -65,12 +65,13 @@ const SignUp = () => {
       .then((userCredential) => {
         // Signed up
         const user = userCredential.user;
-        console.log("🚀 > file: SignUp.jsx:68 > .then > user:", user)
+        console.log("🚀 > file: SignUp.jsx:68 > .then > user:", user);
         updateProfile(auth.currentUser, {
-          displayName: fName + lName,
-          photoURL: "https://example.com/jane-q-user/profile.jpg",
+          displayName: fName + " " + lName,
+          photoURL: "./src/assets/user.png",
+          online: false,
         }).then(() => {
-          sendEmailVerification(auth.currentUser)
+          sendEmailVerification(auth.currentUser);
           toast.success("Registration successful");
           setTimeout(() => {
             navigate("/sign-in");
@@ -84,7 +85,10 @@ const SignUp = () => {
           setEmailErr("this email already exist");
         }
         const errorMessage = error.message;
-        console.log("🚀 > file: SignUp.jsx:90 > handleSignUp > errorMessage:", errorMessage)
+        console.log(
+          "🚀 > file: SignUp.jsx:90 > handleSignUp > errorMessage:",
+          errorMessage
+        );
         // ..
       });
   };

@@ -1,25 +1,61 @@
+import { FaCloudUploadAlt } from "react-icons/fa";
+import Post from "../Post";
+import "./Dashbord.css";
+import UploadProfilePic from "../UploadProfilePic";
+import { useDispatch, useSelector } from "react-redux";
+import { IoLogOut } from "react-icons/io5";
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { userData } from "../../userLoginInfoSlice";
+const Dashbord = ({ handleSwitchComponent, show, setShow }) => {
+  const data = useSelector((state) => state.userLoginReducer.value);
+  const auth = getAuth();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-import Post from '../Post';
-import './Dashbord.css'
-const Dashbord = () => {
-    return (
-      <>
+  // signing out function
+  const handleLogOut = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        console.log("oke");
+        dispatch(userData(null));
+        localStorage.removeItem("userData");
+        navigate("/sign-in");
+      })
+      .catch((error) => {
+        console.log(
+          "🚀 > file: Dashbord.jsx:27 > handleLogOut > error:",
+          error.code
+        );
+        // An error happened.
+      });
+  };
+  return (
+    <>
+      {show ? (
+        <UploadProfilePic setShow={setShow} />
+      ) : (
         <div className="Customcontainer">
-          <div className="left-panel">
+          <div className="left-panel ml-3">
             <ul>
-              <li>
-                <div
-                  style={{
-                    background: `url(./images/dp.jpg)`,
-                    height: "30px",
-                    width: "30px",
-                    backgroundSize: "cover",
-                    borderRadius: "50%",
-                    cursor: "pointer",
-                  }}
-                ></div>
-                <span className="profile"></span>
-                <p>Aashish Panthi</p>
+              <li className="relative">
+                <div onClick={handleSwitchComponent} className="group">
+                  <div className="group-hover:opacity-100 opacity-0 duration-300 ease-linear text-xl text-white absolute top-10 left-9 z-10">
+                    <FaCloudUploadAlt />
+                  </div>
+                  <div className=" group relative rounded-full  overflow-hidden after:content-[''] after:absolute after:w-full after:h-full after:top-0 after:left-0 group-hover:after:bg-black/25 after:duration-300 after:ease-linear">
+                    <img
+                      className="inline-block h-16 w-16 rounded-full my-2 "
+                      src={data?.photoURL}
+                      alt=""
+                    />
+                  </div>
+                </div>
+
+                <p className="font-pops font-semibold text-lg">
+                  {data?.displayName}
+                </p>
               </li>
               <li>
                 <i className="fa fa-user-friends"></i>
@@ -64,6 +100,10 @@ const Dashbord = () => {
               <li>
                 <i className="fa fa-star"></i>
                 <p>Favourites</p>
+              </li>
+              <li onClick={handleLogOut}>
+                <IoLogOut className="text-2xl text-blue-500" />
+                <p>Logout</p>
               </li>
             </ul>
 
@@ -183,8 +223,9 @@ const Dashbord = () => {
             </div>
           </div>
         </div>
-      </>
-    );
+      )}
+    </>
+  );
 };
 
 export default Dashbord;

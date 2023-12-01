@@ -14,7 +14,9 @@ module.exports = {
   rules: {
     'react-refresh/only-export-components': [
       'warn',
-      { allowConstantExport: true },
+      { allowConstantExport: true, },
+
     ],
+    "eslint-disable-next-line react/prop-types":false
   },
 }
