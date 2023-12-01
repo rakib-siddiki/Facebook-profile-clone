@@ -43,8 +43,7 @@ const UploadProfilePic = ({ setShow }) => {
   const getCropData = () => {
     if (typeof cropperRef.current?.cropper !== "undefined") {
       setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
-      const userId = auth.currentUser;
-      console.log("🚀 > file: UploadProfilePic.jsx:47 > getCropData > userId:", userId)
+      const userId = auth.currentUser.uid;      
       // firebase storage
       const storageRef = ref(storage, userId);
       const message4 = cropperRef.current?.cropper
