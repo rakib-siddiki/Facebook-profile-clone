@@ -44,7 +44,7 @@ const Dashbord = ({ handleSwitchComponent, show, setShow }) => {
                   <div className="group-hover:opacity-100 opacity-0 duration-300 ease-linear text-xl text-white absolute top-10 left-9 z-10">
                     <FaCloudUploadAlt />
                   </div>
-                  <div className=" group relative rounded-full  overflow-hidden after:content-[''] after:absolute after:w-full after:h-full after:top-0 after:left-0 group-hover:after:bg-black/25 after:duration-300 after:ease-linear">
+                  <div className=" group relative after:rounded-full  overflow-hidden after:content-[''] after:absolute after:w-16 after:h-16 after:top-2 after:left-0 group-hover:after:bg-black/25 after:duration-300 after:ease-linear">
                     <img
                       className="inline-block h-16 w-16 rounded-full my-2 "
                       src={data?.photoURL}
