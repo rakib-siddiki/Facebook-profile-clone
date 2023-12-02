@@ -122,7 +122,7 @@ const Dashbord = ({ handleSwitchComponent, show, setShow }) => {
             <div className="story-section">
               <div className="story create">
                 <div className="dp-image">
-                  <img src="./images/dp.jpg" alt="Profile pic" />
+                  <img src={data?.photoURL} alt="Profile pic" />
                 </div>
                 <span className="dp-Customcontainer">
                   <i className="fa fa-plus"></i>

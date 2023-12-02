@@ -1,8 +1,11 @@
+import { useSelector } from "react-redux";
 
 
 const NavBar = () => {
+  const data = useSelector((state) => state.userLoginReducer.value);
+
   return (
-    <nav className="h-16 w-full px-8 flex justify-between bg-white shadow sticky top-0 z-50">
+    <nav className="h-16 w-full px-8 flex justify-between items-center bg-white shadow sticky top-0 z-50">
       <div className="flex items-center">
         <img src="./images/logo.png" alt="Logo" className="w-10" />
         <input
@@ -31,17 +34,8 @@ const NavBar = () => {
       </div>
 
       <div className="flex items-center">
-        <span
-          className="profile"
-          style={{
-            backgroundImage: `url('./images/dp.jpg')`,
-            height: "30px",
-            width: "30px",
-            backgroundSize: "cover",
-            borderRadius: "50%",
-            cursor: "pointer",
-          }}
-        ></span>
+
+        <img src={data.photoURL} alt="" className="w-8 h-8" />
 
         <a
           href="#"

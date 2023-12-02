@@ -114,7 +114,7 @@ const UploadProfilePic = ({ setShow }) => {
             </h2>
             <div className="inline-block h-16 w-16 rounded-full overflow-hidden my-2 img-preview"><img
               className="inline-block w-full h-full rounded-full my-2"
-              src={data.photoURL}
+              src={data?.photoURL}
               alt="Image Description"
             /></div>
             
