@@ -36,7 +36,7 @@ const SignIn = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        if (user.emailVerified) {
+        if (!user.emailVerified) { //========================= this need to be change ============================ remove the not sign,
           toast.success("Sign In successful");
           dispatch(userData(user));
           localStorage.setItem("userData", JSON.stringify(user));

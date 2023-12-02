@@ -9,10 +9,12 @@ import {
 import { useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
+import { getDatabase, ref, set } from "firebase/database";
 import "react-toastify/dist/ReactToastify.css";
 const SignUp = () => {
   // firebase
   const auth = getAuth();
+  const db  = getDatabase()
   // state variables
   const [fName, setFname] = useState("");
   const [lName, setLname] = useState("");
@@ -69,14 +71,21 @@ const SignUp = () => {
         updateProfile(auth.currentUser, {
           displayName: fName + " " + lName,
           photoURL: "./src/assets/user.png",
-          online: false,
-        }).then(() => {
-          sendEmailVerification(auth.currentUser);
-          toast.success("Registration successful");
-          setTimeout(() => {
-            navigate("/sign-in");
-          }, 2000);
-        });
+        })
+          .then(() => {
+            sendEmailVerification(auth.currentUser);
+            toast.success("Registration successful");
+            setTimeout(() => {
+              navigate("/sign-in");
+            }, 2000);
+          })
+          .then(() => {
+            set(ref(db, "users/" + user.uid), {
+              username: user.displayName,
+              email: user.email,
+              profile_picture: user.photoURL,
+            });
+          });
         // ...
       })
       .catch((error) => {

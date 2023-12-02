@@ -13,10 +13,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { userData } from "../userLoginInfoSlice";
 import { ToastContainer, toast } from "react-toastify";
 import { getAuth, updateProfile } from "firebase/auth";
+import { getDatabase,ref as Dref, update } from "firebase/database";
 const UploadProfilePic = ({ setShow }) => {
   // firebase 
   const storage = getStorage();
   const auth = getAuth()
+  const db = getDatabase()
   // redux
   const data = useSelector((state) => state.userLoginReducer.value);
   const dispatch =useDispatch()
@@ -60,6 +62,9 @@ const UploadProfilePic = ({ setShow }) => {
             console.log('ok');
               dispatch(userData(auth.currentUser))
               localStorage.setItem('userData',JSON.stringify(auth.currentUser))
+              update(Dref(db, "users/"+data.uid), {
+                profile_picture: downloadURL,
+              });
               toast.success('Updateing Your Profile')
               setShow(prev=>!prev)
             })
@@ -107,12 +112,12 @@ const UploadProfilePic = ({ setShow }) => {
             <h2 className="text-3xl font-bold text-gray-900">
               Upload Your Profile
             </h2>
-            <div className="inline-block h-16 w-16 rounded-full overflow-hidden my-2 img-preview"></div>
-            {/* <img
-              className="inline-block h-16 w-16 rounded-full my-2"
-              src={image}
+            <div className="inline-block h-16 w-16 rounded-full overflow-hidden my-2 img-preview"><img
+              className="inline-block w-full h-full rounded-full my-2"
+              src={data.photoURL}
               alt="Image Description"
-            /> */}
+            /></div>
+            
             <p className="mt-2 text-sm text-gray-400">
               select your profile picture
             </p>

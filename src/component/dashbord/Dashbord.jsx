@@ -7,6 +7,7 @@ import { IoLogOut } from "react-icons/io5";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { userData } from "../../userLoginInfoSlice";
+import Userlist from "../Userlist";
 const Dashbord = ({ handleSwitchComponent, show, setShow }) => {
   const data = useSelector((state) => state.userLoginReducer.value);
   const auth = getAuth();
@@ -37,23 +38,24 @@ const Dashbord = ({ handleSwitchComponent, show, setShow }) => {
         <UploadProfilePic setShow={setShow} />
       ) : (
         <div className="Customcontainer">
-          <div className="left-panel ml-3">
+          <div className="left-panel ml-3 overflow-y-auto">
+            {/* left side menu  */}
             <ul>
               <li className="relative">
                 <div onClick={handleSwitchComponent} className="group">
-                  <div className="group-hover:opacity-100 opacity-0 duration-300 ease-linear text-xl text-white absolute top-10 left-9 z-10">
-                    <FaCloudUploadAlt />
-                  </div>
                   <div className=" group relative after:rounded-full  overflow-hidden after:content-[''] after:absolute after:w-16 after:h-16 after:top-2 after:left-0 group-hover:after:bg-black/25 after:duration-300 after:ease-linear">
+                    <div className="group-hover:opacity-100 opacity-0 duration-300 ease-linear text-xl text-white absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 z-10">
+                      <FaCloudUploadAlt />
+                    </div>
                     <img
-                      className="inline-block h-16 w-16 rounded-full my-2 "
+                      className="inline-block h-16 w-16 rounded-full my-2 relative"
                       src={data?.photoURL}
                       alt=""
                     />
                   </div>
                 </div>
 
-                <p className="font-pops font-semibold text-lg">
+                <p className="font-pops font-semibold text-lg w-1/2">
                   {data?.displayName}
                 </p>
               </li>
@@ -106,6 +108,7 @@ const Dashbord = ({ handleSwitchComponent, show, setShow }) => {
                 <p>Logout</p>
               </li>
             </ul>
+            {/* left side menu end */}
 
             <div className="footer-links">
               <a href="#">Privacy</a>
@@ -200,18 +203,11 @@ const Dashbord = ({ handleSwitchComponent, show, setShow }) => {
           </div>
 
           <div className="right-panel">
-            <div className="pages-section">
-              <h4>Your pages</h4>
-              <a className="page" href="#">
-                <div className="dp">
-                  <img src="./images/logo.png" alt="" />
-                </div>
-                <p className="name">Cody</p>
-              </a>
-              {/* ... (other pages) ... */}
-            </div>
+            {/* userlist  */}
+            <Userlist />
+            {/* userlist end */}
 
-            <div className="friends-section">
+            {/* <div className="friends-section">
               <h4>Friends</h4>
               <a className="friend" href="#">
                 <div className="dp">
@@ -219,8 +215,7 @@ const Dashbord = ({ handleSwitchComponent, show, setShow }) => {
                 </div>
                 <p className="name">Henry Mosely</p>
               </a>
-              {/* ... (other friends) ... */}
-            </div>
+            </div> */}
           </div>
         </div>
       )}
