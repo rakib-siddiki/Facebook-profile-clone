@@ -28,7 +28,7 @@ const WriteSomeThing = () => {
     console.log(data.uid);
     set(push(ref(db, "posts/")), {
       profile_picture: data?.photoURL,
-      username: data.displayName,
+      username: data?.displayName,
       date: moment().format("YYYYMMDD h:mm:ss a"),
       posts: write,
     }).then(() => setWrite(""));
@@ -46,7 +46,7 @@ const WriteSomeThing = () => {
             ref={inputRef}
             value={write}
             type="text"
-            placeholder={`What's on your mind, ${data.displayName} ?`}
+            placeholder={`What's on your mind, ${data?.displayName} ?`}
           />
           {write && (
             <HiMiniPaperAirplane
