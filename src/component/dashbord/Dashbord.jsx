@@ -1,5 +1,4 @@
 import { FaCloudUploadAlt } from "react-icons/fa";
-import Post from "../Post";
 import "./Dashbord.css";
 import UploadProfilePic from "../UploadProfilePic";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +7,8 @@ import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { userData } from "../../userLoginInfoSlice";
 import Userlist from "../Userlist";
+import PostLIst from "../PostLIst";
+import WriteSomeThing from "./WriteSomeThing";
 const Dashbord = ({ handleSwitchComponent, show, setShow }) => {
   const data = useSelector((state) => state.userLoginReducer.value);
   const auth = getAuth();
@@ -55,7 +56,7 @@ const Dashbord = ({ handleSwitchComponent, show, setShow }) => {
                   </div>
                 </div>
 
-                <p className="font-pops font-semibold text-lg w-1/2">
+                <p className="font-pops font-semibold text-lg w-3/5">
                   {data?.displayName}
                 </p>
               </li>
@@ -110,7 +111,7 @@ const Dashbord = ({ handleSwitchComponent, show, setShow }) => {
             </ul>
             {/* left side menu end */}
 
-            <div className="footer-links">
+            <div className="flex gap-1 text-xs font-pops ml-3">
               <a href="#">Privacy</a>
               <a href="#">Terms</a>
               <a href="#">Advance</a>
@@ -163,40 +164,10 @@ const Dashbord = ({ handleSwitchComponent, show, setShow }) => {
               </div>
             </div>
 
-            <div className="post create">
-              <div className="post-top">
-                <div className="dp">
-                  <img src="./images/girl.jpg" alt="" />
-                </div>
-                <input
-                  type="text"
-                  placeholder="What's on your mind, Aashish ?"
-                />
-              </div>
-
-              <div className="post-bottom">
-                <div className="action">
-                  <i className="fa fa-video"></i>
-                  <span>Live video</span>
-                </div>
-                <div className="action">
-                  <i className="fa fa-image"></i>
-                  <span>Photo/Video</span>
-                </div>
-                <div className="action">
-                  <i className="fa fa-smile"></i>
-                  <span>Feeling/Activity</span>
-                </div>
-              </div>
-            </div>
+              <WriteSomeThing/>
+            
             {/* ====post===== */}
-            <Post />
-            {/* ====post===== */}
-            {/* ====post===== */}
-            <Post />
-            {/* ====post===== */}
-            {/* ====post===== */}
-            <Post />
+            <PostLIst/>
             {/* ====post===== */}
 
             {/* ... (other posts) ... */}

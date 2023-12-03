@@ -35,7 +35,7 @@ const NavBar = () => {
 
       <div className="flex items-center">
 
-        <img src={data.photoURL} alt="" className="w-8 h-8" />
+        <img src={data.photoURL} alt="" className="w-8 h-8 rounded-full" />
 
         <a
           href="#"

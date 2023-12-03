@@ -197,15 +197,17 @@
     cursor: pointer;
 }
 
-.post .post-top>input {
-    height: 40px;
-    padding: 5px 10px;
+.post .post-top>textarea {
+    height: 50px;
+    padding: 10px;
     border-radius: 25px;
     outline: none;
     border: none;
     flex: 1;
     background: #eee;
     margin-left: 10px;
+    display: block;
+    resize: none;
 }
 
 .post .post-content {
