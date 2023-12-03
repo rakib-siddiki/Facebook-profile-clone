@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { getDatabase, push, ref, set } from "firebase/database";
 import { HiMiniPaperAirplane } from "react-icons/hi2";
+import moment from "moment";
 const WriteSomeThing = () => {
   const [write, setWrite] = useState("");
   const inputRef = useRef(null);
@@ -28,7 +29,7 @@ const WriteSomeThing = () => {
     set(push(ref(db, "posts/")), {
       profile_picture: data.photoURL,
       username: data.displayName,
-      date: `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}-${new Date().getHours()}-${new Date().getMinutes()}`,
+      date: moment().format("YYYYMMDD h:mm:ss a"),
       posts: write,
     }).then(() => setWrite(""));
   };

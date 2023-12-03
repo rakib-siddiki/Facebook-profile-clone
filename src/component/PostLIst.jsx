@@ -11,6 +11,8 @@ const PostLIst = () => {
       snapshot.forEach((item) => {
         arr.push(item.val());
       });
+      // Sort the posts based on the date in descending order (newest first)
+      arr.sort((oldPost, newPost) => moment(newPost.date, "YYYYMMDD h:mm:ss a") - moment(oldPost.date, "YYYYMMDD h:mm:ss a"));
       setShowPosts(arr);
     });
     // Clean up the event listener to avoid memory leaks
