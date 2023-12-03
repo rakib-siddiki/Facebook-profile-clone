@@ -27,7 +27,7 @@ const WriteSomeThing = () => {
   const hanldePost = () => {
     console.log(data.uid);
     set(push(ref(db, "posts/")), {
-      profile_picture: data.photoURL,
+      profile_picture: data?.photoURL,
       username: data.displayName,
       date: moment().format("YYYYMMDD h:mm:ss a"),
       posts: write,
@@ -39,7 +39,7 @@ const WriteSomeThing = () => {
       <div className="post create">
         <div className="post-top relative ">
           <div className="dp">
-            <img src={data.photoURL} alt="" />
+            <img src={data?.photoURL} alt="" />
           </div>
           <textarea
             onChange={handleChange}
