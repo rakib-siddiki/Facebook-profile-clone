@@ -1,3 +1,5 @@
 export * from './signUp/SignUp'
 export * from './signIn/SignIn'
 export * from './forgetPassword/ForgetPassword'
+export * from './home/Home'
+export* from './notFound/NotFound404'

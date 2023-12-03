@@ -18,7 +18,7 @@ const SignIn = () => {
   const [emailErr, setEmailErr] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
   const [error, setError] = useState(false);
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   // other variable
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
@@ -231,7 +231,7 @@ const SignIn = () => {
                             </div>
                             <div className="relative">
                               <input
-                                type="password"
+                                type={show ? "text" : `password`}
                                 id="password"
                                 name="password"
                                 placeholder="Enter your password "
@@ -254,7 +254,7 @@ const SignIn = () => {
                                 className={`absolute  end-0 flex items-center top-3.5 right-0 pe-3 text-lg cursor-pointer z-20 
                                    `}
                               >
-                                {show ? <IoEye /> : <IoEyeOff />}
+                                {show ?  <IoEyeOff />:<IoEye /> }
                               </div>
                             </div>
                           </div>
