@@ -6,7 +6,6 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
-  updateProfile,
 } from "firebase/auth";
 import { ToastContainer, toast } from "react-toastify";
 import { IoEye, IoEyeOff } from "react-icons/io5";
@@ -36,7 +35,7 @@ const SignIn = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        if (!user.emailVerified) { //========================= this need to be change ============================ remove the not sign,
+        if (user.emailVerified) { 
           toast.success("Sign In successful");
           dispatch(userData(user));
           localStorage.setItem("userData", JSON.stringify(user));
@@ -69,10 +68,14 @@ const SignIn = () => {
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
+        console.log("🚀 > file: SignIn.jsx:71 > signedInWithGoogle > errorCode:", errorCode)
         const errorMessage = error.message;   // The email of the user's account used.
+        console.log("🚀 > file: SignIn.jsx:73 > signedInWithGoogle > errorMessage:", errorMessage)
         const email = error.customData.email;
+        console.log("🚀 > file: SignIn.jsx:75 > signedInWithGoogle > email:", email)
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log("🚀 > file: SignIn.jsx:79 > signedInWithGoogle > credential:", credential)
         // ...
       });
   };
